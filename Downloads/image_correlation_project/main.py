@@ -11,7 +11,7 @@ train_dataset = tf.data.Dataset.from_generator(lambda: train_data_generator_func
 test_dataset = tf.data.Dataset.from_generator(lambda: test_data_generator(params),
                                               output_types=tf.float32, output_shapes=(None, 128, 128, 22))
 """
-
+#para entrenar con una sola sesion 
 train_dataset = tf.data.Dataset.from_generator(lambda: just_one_subj(params),
                                                output_types=(tf.float32, tf.float32),
                                                output_shapes=((None, 128, 128, 22), (None,)))
@@ -37,7 +37,9 @@ checkpoint = ModelCheckpoint(filepath=filepath,
                              mode='min')
 callbacks = [checkpoint]
 
-
+# Fit data to model
+model.fit(train_dataset, epochs=params.epochs, steps_per_epoch=params.steps_per_epoch, validation_data=test_dataset,
+          verbose=0, callbacks=callbacks)
 
 # Generate prediction
 print('==========================================================================')
